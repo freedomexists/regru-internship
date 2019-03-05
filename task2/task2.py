@@ -16,3 +16,22 @@ if __name__ == '__main__':
     os.remove('task2_data_2.txt')
 
 # Результат:
+# $ ls
+# task2_data_1.txt  task2_data_2.txt  task2.py
+# $ cat task2_data_1.txt
+# 1 2 3 4 5 6
+# $ cat task2_data_2.txt
+# 11 22 33
+# 44 55 66
+# $ python3 task2.py
+# task2_data_all.txt  task2.py
+# $ python3 task2.py
+# $ ls
+# task2_data_all.txt  task2.py
+# $ cat task2_data_all.txt
+# 1 2 3 4 5 6
+#
+#
+#
+# 11 22 33
+# 44 55 66
