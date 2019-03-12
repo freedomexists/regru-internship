@@ -19,8 +19,8 @@ if __name__ == '__main__':
                 for line in f2.readlines():
                     f1.write(line)
 
-        os.rename('task2_data_1.txt', 'task2_data_all.txt')
-        os.remove('task2_data_2.txt')
+        os.rename(pth_f1, 'task2_data_all.txt')
+        os.remove(pth_f2)
 
     else:
         print('')
