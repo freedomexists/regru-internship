@@ -7,13 +7,23 @@
 import os
 
 if __name__ == '__main__':
-    with open('task2_data_1.txt', 'ab') as f1:
-        f1.write('\n\n\n'.encode('utf-8'))
-        with open('task2_data_2.txt', 'rb') as f2:
-            for line in f2.readlines():
-                f1.write(line)
-    os.rename('task2_data_1.txt', 'task2_data_all.txt')
-    os.remove('task2_data_2.txt')
+    pth_f1 = 'task2_data_1.txt'
+    pth_f2 = 'task2_data_2.txt'
+
+    if os.path.isfile(pth_f1) and os.path.isfile(pth_f2) and os.access(pth_f1, os.W_OK) and os.access(pth_f2, os.R_OK):
+
+        with open(pth_f1, 'ab') as f1:
+            f1.write('\n\n\n'.encode('utf-8'))
+
+            with open(pth_f2, 'rb') as f2:
+                for line in f2.readlines():
+                    f1.write(line)
+
+        os.rename('task2_data_1.txt', 'task2_data_all.txt')
+        os.remove('task2_data_2.txt')
+
+    else:
+        print('')
 
 # Результат:
 # $ ls
