@@ -14,10 +14,12 @@ if __name__ == '__main__':
         b_array = bytearray()
         text = f.read(1)
         i = 1
+
         while text:
-            b_array.append(int(text.hex(), 16) ^ 0b000010)
+            b_array.append(text[0] ^ 0b000010)
             text = f.read(1)
             i = i + 1
+
         new.write(b_array)
 
     with open('task5_data_new.txt', 'r') as f:
