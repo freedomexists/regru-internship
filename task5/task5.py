@@ -7,23 +7,35 @@
 
 if __name__ == '__main__':
 
-    with open('task5_data.txt', 'r') as f:
-        print(f.read())
+    pth = 'task5_data.txt'
 
-    with open('task5_data.txt', 'rb') as f, open('task5_data_new.txt', 'wb+') as new:
-        b_array = bytearray()
-        text = f.read(1)
-        i = 1
+    try:
+        with open(pth, 'r') as f:
+            print(f.read())
 
-        while text:
-            b_array.append(text[0] ^ 0b000010)
+        with open(pth, 'rb') as f, open('task5_data_new.txt', 'wb+') as new:
+            b_array = bytearray()
             text = f.read(1)
-            i = i + 1
+            i = 1
 
-        new.write(b_array)
+            while text:
+                b_array.append(text[0] ^ 0b000010)
+                text = f.read(1)
+                i = i + 1
 
-    with open('task5_data_new.txt', 'r') as f:
-        print(f.read())
+            new.write(b_array)
+
+        with open('task5_data_new.txt', 'r') as f:
+            print(f.read())
+
+    except FileNotFoundError:
+        print('Файл не найден')
+
+    except IsADirectoryError:
+        print('Указана директория, ожидается файл')
+
+    except PermissionError:
+        print('В доступе отказано')
 
 
 # Результат:
