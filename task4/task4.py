@@ -8,32 +8,44 @@ import os
 
 def delete_not_ascii(file, pth):
 
-    with open(file, 'r') as f:
-        content = f.read().encode('ascii', errors='ignore')
+    if os.path.isfile(file):
 
-    with open(os.path.join('..', pth, '_'.join(['no', 'ascii', file])), 'w') as f:
-        f.write(content.decode('utf-8'))
+        with open(file, 'r') as f:
+            content = f.read().encode('ascii', errors='ignore')
+
+        with open(os.path.join('..', pth, '_'.join(['no', 'ascii', file])), 'w') as f:
+            f.write(content.decode('utf-8'))
 
 
 def delete_newline(file, pth):
 
-    with open(file, 'r') as f:
-        content = f.read()
+    if os.path.isfile(file):
 
-    body_start = content.find('<BODY>')+7
-    body_end = content.rfind('</BODY>')-1
-    newlines_amount = content[body_start:body_end].count('\n')
+        with open(file, 'r') as f:
+            content = f.read()
 
-    with open(os.path.join('..', pth, '_'.join(['no', 'newlines', file])), 'w') as f:
-        f.write(''.join([content[:body_start],
-                         content[body_start:body_end].replace('\n', ''),
-                         content[body_end + newlines_amount - 2:]]))
+        body_start = content.find('<BODY>')+7
+        body_end = content.rfind('</BODY>')-1
+        newlines_amount = content[body_start:body_end].count('\n')
+
+        with open(os.path.join('..', pth, '_'.join(['no', 'newlines', file])), 'w') as f:
+            f.write(''.join([content[:body_start],
+                             content[body_start:body_end].replace('\n', ''),
+                             content[body_end + newlines_amount - 2:]]))
+    else:
+        print('Ошибка, укажите файл для обработки')
 
 
 if __name__ == '__main__':
+
     uplvl_folder_name = 'test'
-    os.mkdir(os.path.join('..', uplvl_folder_name))
-    delete_not_ascii('day_1_task4_data.html', uplvl_folder_name)
+
+    if not os.path.isdir(os.path.join('..', uplvl_folder_name)):
+        os.mkdir(os.path.join('..', uplvl_folder_name))
+    else:
+        print('Директория уже существует')
+
+    delete_not_ascii('day_1_task4_data1.html', uplvl_folder_name)
     delete_newline('day_1_task4_data.html', uplvl_folder_name)
 
 
