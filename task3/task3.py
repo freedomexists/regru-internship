@@ -15,30 +15,29 @@ import os
 
 if __name__ == '__main__':
 
-    try:
-        pth = sys.argv[1]
-        if os.path.isfile(pth):
-            print('Доступ на запись - {}'.format(os.access(pth, os.R_OK)))
+    pth = sys.argv[1]
+    if os.path.isfile(pth):
+        print('Доступ на запись - {}'.format(os.access(pth, os.R_OK)))
+        if os.access(os.path.dirname(pth), os.X_OK) or not os.path.dirname(pth):
+            os.remove(pth)
+        else:
+            print('Не достаточно прав для удаления файла')
+
+    elif not os.path.split(pth)[1]:
+        print('Ожидается файл, указана директория')
+
+    else:
+        with open(pth, 'wb+') as f:
+            f.write('some string строка'.encode('utf-8'))
+            f.seek(0)
+            content = f.read()
+            print(content.decode('WINDOWS-1251'), content.decode('utf-8'), sep='\n')
+
+        if os.access(os.path.dirname(pth), os.X_OK) or not os.path.dirname(pth):
             os.remove(pth)
 
         else:
-
-            try:
-                with open(pth, 'wb+') as f:
-                    f.write('some string строка'.encode('utf-8'))
-                    f.seek(0)
-                    content = f.read()
-                    print(content.decode('WINDOWS-1251'), content.decode('utf-8'), sep='\n')
-                if os.access(os.path.dirname(pth), os.X_OK) or not os.path.dirname(pth):
-                    os.remove(pth)
-                else:
-                    print('Не достаточно прав для удаления файла')
-
-            except IsADirectoryError:
-                print('Ожидается файл, указана директория')
-
-    except IndexError:
-        print('Введите путь до файла в качестве параметра')
+            print('Не достаточно прав для удаления файла')
 
 
 # $ sudo python3 task3.py /home/test.txt
