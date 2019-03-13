@@ -4,39 +4,35 @@
 # в бинарном режиме в файл 'task5_data_new.txt'.
 # Вывести содержимое файла в обычном режиме.
 
+import os
 
 if __name__ == '__main__':
 
     pth = 'task5_data.txt'
 
-    try:
+    if os.path.isfile(pth):
+
         with open(pth, 'r') as f:
             print(f.read())
 
-        with open(pth, 'rb') as f, open('task5_data_new.txt', 'wb+') as new:
-            b_array = bytearray()
-            text = f.read(1)
-            i = 1
+        if os.access(os.path.split(os.path.abspath(pth))[1], os.X_OK):
 
-            while text:
-                b_array.append(text[0] ^ 0b000010)
-                text = f.read(1)
-                i = i + 1
+            with open(pth, 'rb') as f, open('task5_data_new.txt', 'wb+') as new:
+                char = f.read(1)
+                i = 1
 
-            new.write(b_array)
+                while char:
+                    new.write(bytes([ord(char) ^ 0b000010]))
+                    char = f.read(1)
+                    i = i + 1
+        else:
+            print('Ошибка. Не достаточно прав.')
 
         with open('task5_data_new.txt', 'r') as f:
             print(f.read())
 
-    except FileNotFoundError:
-        print('Файл не найден')
-
-    except IsADirectoryError:
-        print('Указана директория, ожидается файл')
-
-    except PermissionError:
-        print('В доступе отказано')
-
+    else:
+        print('Ошибка. Указанный путь не является файлом или не существует.')
 
 # Результат:
 # $ python3 task5.py
