@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="blase@127.0.0.1:2222" autoUploadExternalChanges="true">
+    <serverData>
+      <paths name="blase@127.0.0.1:2222">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="blase@127.0.0.1:2222 (2)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/blase/regru/day2" local="$PROJECT_DIR$" />
+            <mapping local="" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
