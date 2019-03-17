@@ -14,7 +14,7 @@ def is_float(s):
 lst = [1, 5445, 5445.0, 1.56, '1.90', 'сорок_два', False, '', True]
 
 print(sum(elem if isinstance(elem, (int, float))
-          else float(elem) if isinstance(elem, str) and isfloat(elem) else 0 for elem in lst))
+          else float(elem) if isinstance(elem, str) and is_float(elem) else 0 for elem in lst))
 
 
 # $ python3 task2.py
