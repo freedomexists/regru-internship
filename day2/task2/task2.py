@@ -3,7 +3,7 @@
 # Постарайтесь использовать максимально возможное кол-во элементов.
 
 
-def isfloat(s):
+def is_float(s):
     try:
         float(s)
         return True
