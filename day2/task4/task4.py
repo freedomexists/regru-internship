@@ -6,19 +6,31 @@
 # в отсортированном по ключам виде, разделённые 40 решётками.
 # Гарантируется, что все значения и ключи уникальны.
 
-data = input().split('; ')
+data = input().split(';')
 dct = {}
 
 for cell in data:
     k, v = cell.split('=')
     dct[k] = v
 
+for k in sorted(dct):
+    print(k + ' = ' + dct[k])
+
 inverted_dct = dict([(v, k) for k, v in dct.items()])
-print({k: dct[k] for k in sorted(dct)}, '#'*40, {k: inverted_dct[k] for k in sorted(inverted_dct)}, sep='\n')
+
+print('#'*40)
+
+for k in sorted(inverted_dct):
+    print(k + ' = ' + inverted_dct[k])
+
 
 # Результат:
 # $ python3 task4.py
-# php=Rasmus Lerdorf; perl=Larry Wall; python=Guido van Rossum
-# {'perl': 'Larry Wall', 'php': 'Rasmus Lerdorf', 'python': 'Guido van Rossum'}
+# php=Rasmus Lerdorf;perl=Larry Wall;python=Guido van Rossum
+# perl = Larry Wall
+# php = Rasmus Lerdorf
+# python = Guido van Rossum
 # ########################################
-# {'Guido van Rossum': 'python', 'Larry Wall': 'perl', 'Rasmus Lerdorf': 'php'}
+# Guido van Rossum = python
+# Larry Wall = perl
+# Rasmus Lerdorf = php
