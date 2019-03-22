@@ -37,10 +37,21 @@ susp_dct = {9: [0, 77, 154, 231, 308, 385, 462],
                   340, 361, 369, 372, 373, 376],
             57: [273, 306]}
 
-inv_d = {}
+if isinstance(susp_dct, dict):
 
-for k in susp_dct:
-    for i in susp_dct[k]:
-        inv_d[i] = k ^ 0b00000011
+    inv_d = {}
 
-print(''.join([chr(inv_d[k]) for k in sorted(inv_d)]))
+    for k in susp_dct:
+        for i in susp_dct[k]:
+            try:
+                inv_d[i] = k ^ 0b00000011
+            except TypeError:
+                print('Ошибка типа данных. Ожидается int в ключах')
+                exit()
+    try:
+        print(''.join([chr(inv_d[k]) for k in sorted(inv_d)]))
+    except TypeError:
+        print('Ошибка типа данных. Ожидается int в значениях словаря')
+
+else:
+    print('Ошибка ввода. Ожидается dict')
