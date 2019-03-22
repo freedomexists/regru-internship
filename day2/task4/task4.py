@@ -16,7 +16,7 @@ for cell in data:
 for k in sorted(dct):
     print(k + ' = ' + dct[k])
 
-inverted_dct = dict([(v, k) for k, v in dct.items()])
+inverted_dct = {v: k for k, v in dct.items()}
 
 print('#'*40)
 
