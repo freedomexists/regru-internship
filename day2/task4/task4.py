@@ -21,7 +21,7 @@ inverted_dct = {v: k for k, v in dct.items()}
 print('#'*40)
 
 for k in sorted(inverted_dct):
-    print(k + ' = ' + inverted_dct[k])
+    print('{} = {}'.format(k, inverted_dct[k]))
 
 
 # Результат:
