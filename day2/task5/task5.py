@@ -42,9 +42,12 @@ if isinstance(susp_dct, dict):
     inv_d = {}
 
     for k in susp_dct:
+
+        new_k = k ^ 0b00000011
+
         for i in susp_dct[k]:
             try:
-                inv_d[i] = k ^ 0b00000011
+                inv_d[i] = new_k
             except TypeError:
                 print('Ошибка типа данных. Ожидается int в ключах')
                 exit()
