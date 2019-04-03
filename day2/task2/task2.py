@@ -3,24 +3,14 @@
 # Постарайтесь использовать максимально возможное кол-во элементов.
 
 lst = [1, 5445, 5445.0, 1.56, '1.90', 'сорок_два', False, '', True]
-
-
-def is_float(s):
-    try:
-        float(s)
-        return True
-    except ValueError:
-        return False
-
-
 summ = 0
 
 for elem in lst:
 
-    if isinstance(elem, (int, float)):
-        summ += elem
-    elif isinstance(elem, str) and is_float(elem):
+    try:
         summ += float(elem)
+    except ValueError:
+        pass
 
 print(summ)
 
