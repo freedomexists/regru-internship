@@ -3,23 +3,6 @@
 # Нужно создать матрицу, NxN, и заполнить ее натуральными числами от 1 до NxN по спирали во внутрь по часовой стрелке.
 # Результат вывести в виде квадратной матрицы.
 
-
-def w_func(n, i, j):
-
-    if j == 0:
-        return 4 * (n - 1) - i + 1
-    else:
-        return 4 * (n - 2 * j - 1) + 1 + w_func(n, i, j - 1)
-
-
-def e_func(n, i, j):
-
-    if j == 0:
-        return n + i
-    else:
-        return 4 * (n - 2 * j) + 1 + e_func(n, i, j - 1)
-
-
 try:
     n = int(input('Введите размер матрицы: '))
 
@@ -27,39 +10,34 @@ except ValueError:
     print('Ошибка. Введите число')
 
 else:
+    max_num = n * n
+    align = len(str(max_num))
+    i = 0
+    j = 0
+    num = 1
+    matrix = [[0 for _ in range(n)] for _ in range(n)]
 
-    align = len(str(n * n))
+    while num <= max_num:
 
-    for i in range(n):
+        matrix[i][j] = num
 
-        line = []
+        if i <= j + 1 and i + j < n - 1:
+            j += 1
 
-        if i <= n // 2:
+        elif i < j and i + j >= n - 1:
+            i += 1
 
-            for j in range(i):
-                line.append(w_func(n, i, j))
-
-            for j in range(n - 2 * i):
-                line.append(4 * (n - i) * i + j + 1)
-
-            for j in range(i - 1, -1, -1):
-                line.append(e_func(n, i, j))
+        elif i >= j and i + j > n - 1:
+            j -= 1
 
         else:
+            i -= 1
 
-            for j in range(n - i - 1):
-                line.append(w_func(n, i, j))
+        num += 1
 
-            for j in range(n - (n - i - 1) * 2, 0, -1):
-                line.append(4 * i * (n - i - 1) + 2 * n - 2 + j)
-
-            for j in range(n-i-2, -1, -1):
-                line.append(e_func(n, i, j))
-
-        print(' '.join(['{:>{}}'.format(line[i], align) for i in range(n)]))
+    print('\n'.join([' '.join('{:>{}}'.format(matrix[i][j], align) for j in range(n)) for i in range(n)]))
 
 # Результат:
-# $ python3 task1.py
 # $ python3 task1.py
 # Введите размер матрицы: 10
 #   1   2   3   4   5   6   7   8   9  10
