@@ -14,7 +14,7 @@ for cell in data:
     dct[k] = v
 
 for k in sorted(dct):
-    print(k + ' = ' + dct[k])
+    print('{} = {}'.format(k, dct[k]))
 
 inverted_dct = {v: k for k, v in dct.items()}
 
