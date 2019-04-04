@@ -43,7 +43,7 @@ if isinstance(susp_dct, dict):
 
     for k in susp_dct:
 
-        new_k = k ^ 0b00000011
+        new_k = k ^ 3  # 11
 
         for i in susp_dct[k]:
             try:
