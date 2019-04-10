@@ -1,0 +1,24 @@
+
+<?xml version="1.0" encoding="utf-8" ?>
+
+<recipies>
+    <dish1>
+        <name>
+            blini
+        </name>
+        <ingredient>
+            <milk>500</milk>
+            <egs>2</egs>
+            <flour>200</flour>
+            <sugar>2</sugar>
+        </ingredient>
+    </dish1>
+    <dish2>
+        <name>
+            fried eggs
+        </name>
+        <ingredient>
+            <egs>3</egs>
+        </ingredient>
+    </dish2>
+</recipies>
