@@ -7,7 +7,6 @@ sock.bind(('127.0.0.1', 8887))
 sock.listen(1)
 while True:
     conn, addr = sock.accept()
-    print('Client connected', addr)
     request = conn.recv(1024).decode('utf-8')
     try:
         _, pth = request.split()
@@ -22,9 +21,6 @@ while True:
             while l:
                 conn.send(l)
                 l = f.read(1024)
-                print(l)
-
-            print('Файл отправлен')
             conn.shutdown(socket.SHUT_WR)
             f.close()
         else:
