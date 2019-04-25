@@ -3,7 +3,7 @@
 import re
 import requests
 
-
+img_formats = ['jpg', 'jpeg', 'bmp', 'gif', 'tif', 'png']
 with open('some.html', 'r', encoding='utf-8') as f:
     data = f.read()
     pattern = r'https?://[^\"\s>]+'
@@ -14,7 +14,7 @@ with open('some.html', 'r', encoding='utf-8') as f:
         except requests.exceptions.SSLError:
             pass
         if 'Content-Disposition' in response.headers:
-            if response.headers['Content-Disposition'].split('.')[-1] in ['jpg', 'jpeg', 'bmp', 'gif', 'tif', 'png']:
+            if response.headers['Content-Disposition'].split('.')[-1] in img_formats:
                 print(ref)
 
 # Результат
