@@ -6,7 +6,7 @@
 def decor(some_params):
     def wrapper(func):
         print(some_params)
-        return func()
+        return func
     return wrapper
 
 
@@ -15,6 +15,7 @@ def pr_func():
 
 
 pr_func = decor('some_params')(pr_func)
+pr_func()
 
 # Рузультат:
 # $ python3 task3.py
