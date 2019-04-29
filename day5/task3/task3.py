@@ -15,6 +15,7 @@ def pr_func():
 
 
 pr_func = decor('some_params')(pr_func)
+print('---')
 pr_func()
 
 # Рузультат:
