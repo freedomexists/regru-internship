@@ -47,4 +47,7 @@ if __name__ == '__main__':
     print('Сайт взломан.\nlogin - {}\npassword - {}'.format(data['login'], data['password']))
 
 # Результат:
-#
+# $ python3 task5.py
+# Сайт взломан.
+# login - my_super_login
+# password - 12312312321212121212121
