@@ -2,18 +2,11 @@ import os
 import socket
 
 
-sock = socket.socket()
-sock.bind(('127.0.0.1', 8887))
-sock.listen(1)
-while True:
-    conn, addr = sock.accept()
-    request = conn.recv(1024).decode('utf-8')
-    try:
-        _, pth = request.split()
-    except ValueError:
-        conn.send('Format Error'.encode('utf-8'))
-    else:
-        print(request)
+def main(sock):
+    while True:
+        conn, addr = sock.accept()
+        pth = conn.recv(1024).decode('utf-8')
+        print(pth)
         if os.path.isfile(pth):
             f = open('{}'.format(pth), 'rb')
             conn.send('Загружаю файл'.encode('utf-8'))
@@ -25,3 +18,9 @@ while True:
             f.close()
         else:
             conn.send('Нет такого файла'.encode('utf-8'))
+
+
+sock = socket.socket()
+sock.bind(('127.0.0.1', 8887))
+sock.listen(1)
+main(sock)
