@@ -43,16 +43,20 @@ while True:
 
     try:
         num1, num2 = input('Введите два целых числа:  ').split()
-    except ValueError:
-        print('Непредвиденная ошибка')
+    except ValueError as e:
+        print('Непредвиденная ошибка ввода', e)
+    except KeyboardInterrupt:
+        print('Вы вышли из программы')
+        break
     else:
 
         if isint(num1) and isint(num2):
 
             try:
                 result = nevedomaya_func(int(num1), int(num2))
-            except ImportError:
-                print('Непредвиденная ошибка')
+            except ImportError as e:
+                print('Непредвиденная ошибка', e)
+                break
             except ArithmeticError as e:
                 print(e)
                 break
@@ -63,3 +67,16 @@ while True:
         else:
             print('Числа должны быть целыми!')
             continue
+
+# Результат:
+# $ python3 try3.py
+# Введите два целых числа:  12 12
+# Поделили успешно, вот вам результат: 1
+#
+# $ python3 try3.py
+# Введите два целых числа:  11 12
+# Ошибка, результат деления: 0.9166666666666666
+#
+# $ python3 try3.py
+# Введите два целых числа:  12 11
+# Непредвиденная ошибка No module named 'hahaha'
