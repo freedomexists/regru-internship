@@ -12,16 +12,6 @@
 # Все исключения отлавливаем в отдельном блоке except.
 
 
-def isint(num):
-
-    try:
-        int(num)
-    except ValueError:
-        return False
-    else:
-        return True
-
-
 def nevedomaya_func(divident, divisor):
 
     try:
@@ -42,31 +32,25 @@ def nevedomaya_func(divident, divisor):
 while True:
 
     try:
-        num1, num2 = input('Введите два целых числа:  ').split()
+        num1, num2 = map(int, input('Введите два целых числа:  ').split())
     except ValueError as e:
         print('Непредвиденная ошибка ввода', e)
+        continue
     except KeyboardInterrupt:
         print('Вы вышли из программы')
         break
     else:
-
-        if isint(num1) and isint(num2):
-
-            try:
-                result = nevedomaya_func(int(num1), int(num2))
-            except ImportError as e:
-                print('Непредвиденная ошибка', e)
-                break
-            except ArithmeticError as e:
-                print(e)
-                break
-            else:
-                print('Поделили успешно, вот вам результат: ', int(result), sep='')
-                break
-
+        try:
+            result = nevedomaya_func(num1, num2)
+        except ImportError as e:
+            print('Непредвиденная ошибка', e)
+            break
+        except ArithmeticError as e:
+            print(e)
+            break
         else:
-            print('Числа должны быть целыми!')
-            continue
+            print('Поделили успешно, вот вам результат: ', int(result), sep='')
+            break
 
 # Результат:
 # $ python3 try3.py
