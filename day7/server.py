@@ -33,14 +33,18 @@ def create_connection(ip, port):
         sock.close()
 
 
+def recv_req(conn):
+    tmpfile = conn.makefile('rb')
+    return tmpfile
+
+
 def server(args):
 
     while True:
         conn = create_connection(args.ip, args.port)
         print('conn')
-        req = conn.recv(4096)
-        print(req)
-        method, url, cookies = process_request(req)
+        req_file = recv_req(conn)
+        method, url, cookies = process_request(req_file)
         data = run(method, url, cookies)
         resp = process_response(data)
         conn.send(resp)
