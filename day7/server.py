@@ -1,6 +1,6 @@
 import argparse
 import socket
-from http_processes import process_request, process_response
+from http_processes import process_request, process_response, HTTPError
 from backend import run
 
 
@@ -44,7 +44,17 @@ def server(args):
         conn = create_connection(args.ip, args.port)
         print('conn')
         req_file = recv_req(conn)
-        method, url, cookies = process_request(req_file)
+
+        try:
+            method, url, cookies = process_request(req_file)
+        except HTTPError as e:
+            resp = process_response(e)
+            conn.send(resp)
+            continue
+        except ConnectionResetError as e:
+            conn.send(e.strerror.encode('utf-8'))
+            conn.close()
+            break
         data = run(method, url, cookies)
         resp = process_response(data)
         conn.send(resp)
