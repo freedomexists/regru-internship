@@ -7,13 +7,14 @@ from backend import run, get_show_errors_status, get_short_log_status
 
 def logging_req(func):
     def wrap_log(*args, **kwargs):
-        with open('log.txt', 'w') as log:
+        with open('log.txt', 'wb') as log:
             result = func(*args, **kwargs)
-            if get_short_log_status:
-                log.write(result)
-            else:
-                log.write(*args, **kwargs)
-        return wrap_log
+            if get_short_log_status == 1:
+                log.write('[Method - {} :: URL - {} :: Cookie - {}]'.format(*result).encode('utf-8'))
+            # else:
+            #     log.write(b''.join(*args))
+            return result
+    return wrap_log
 
 
 def parse_cmd():
@@ -21,12 +22,12 @@ def parse_cmd():
     parser.add_argument('--host',
                         dest='ip',
                         help='Необходимо указать ip-адрес сервера',
-                        default='10.0.2.15')
+                        default='127.0.0.1') #10.0.2.15
     parser.add_argument('--port',
                         dest='port',
                         type=int,
                         help='Необходимо указать port-адрес сервера',
-                        default='8887')
+                        default='8888')
 
     return parser.parse_args()
 
@@ -44,12 +45,14 @@ def bind_sock(ip, port):
 def create_connection(sock):
         while True:
             client_sock, client_addr = sock.accept()
+            print(client_addr)
             return client_sock
 
 
 def recv_req(conn):
     tmpfile = conn.makefile('rb')
     return tmpfile
+
 
 @logging_req
 def unpack_req_data(req_file):   #костыль для реализации логирования
@@ -64,21 +67,21 @@ def server(args):
     while True:
         conn = create_connection(sock)
         req_file = recv_req(conn)
-
         try:
             method, url, cookies = unpack_req_data(req_file)
+            data = run(method, url, cookies)
         except HTTPError as e:
             resp = process_response(e)
-            conn.send(resp.encode('utf-8'))
+            conn.send(resp)
             continue
         except ConnectionResetError as e:
-            conn.send(e.strerror.encode('utf-8'))
-            conn.close()
+            resp = process_response(e)
+            conn.send(resp)
+            sock.close()
             break
 
-        data = run(method, url, cookies)
         resp = process_response(data)
-        conn.send(resp.encode('utf-8'))
+        conn.send(resp)
         if conn:
             conn.close()
 

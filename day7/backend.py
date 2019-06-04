@@ -23,7 +23,8 @@ def handler(method, url):
     url = url.split('/')[1:]
     if url[0] in urls:
         if url[0] == '' and method == 'GET':
-            body = open('start.html', 'r')
+            start = open('start.html', 'r', encoding='UTF-8')
+            body = '\n'.join(start.readlines())
             data = (200, 'OK', body)
             return data
 
