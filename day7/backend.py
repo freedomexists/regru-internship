@@ -8,7 +8,7 @@ urls = {
     'short_log',
 }
 show_errors_switch = 0
-short_log_switch = 0
+short_log_switch = 1
 
 
 def get_show_errors_status():
@@ -16,12 +16,14 @@ def get_show_errors_status():
 
 
 def get_short_log_status():
-    return show_errors_switch
+    return short_log_switch
 
 
-def handler(method, url):
+def handler(method, url, bg_color):
     url = url.split('/')[1:]
+
     if url[0] in urls:
+
         if url[0] == '' and method == 'GET':
             start = open('start.html', 'r', encoding='UTF-8')
             body = '\n'.join(start.readlines())
@@ -36,7 +38,7 @@ def handler(method, url):
 
         elif url[0] == 'div' and method == 'GET':
 
-            if url[3] == 'to':
+            if url[2] == 'to':
                 return divide(url[1], url[3])
             else:
                 raise HTTPError(404, 'Not found', 'Страница не найдена')
@@ -49,7 +51,7 @@ def handler(method, url):
             except ValueError:
                 raise HTTPError(404, 'Not found', 'Страница не найдена')
             else:
-                set_cookie['Set-Cookie'] = url[1]
+                set_cookie['Set-Cookie'] = url[1] + '; path=/'
                 data = (200, 'OK', None, set_cookie)
                 return data
         elif url[0] == 'short_log' and method == 'POST':
@@ -65,15 +67,21 @@ def handler(method, url):
 
 
 def cookie_handler(cookie):
-    if cookie.get('bg-color') == 'green':
-        return True
+    print(cookie)
+    if cookie:
+        color = cookie.get('bg_color')
+        print(color)
+        if color == 'green':
+            bg_color = '#12e079'
+        else:
+            bg_color = '#fcfcfc'
+        return bg_color
 
 
 def run(method, url, cookie=None):
-    data = handler(method, url)
-
-
-    return data
+    bg_color = cookie_handler(cookie)
+    data = handler(method, url, bg_color)
+    return data, bg_color
 
 
 def show_errors(switch):
@@ -100,4 +108,5 @@ def divide(num1, num2):
         reason = 'OK'
     finally:
         data = (status, reason, body)
+        print(status, reason, body)
         return data

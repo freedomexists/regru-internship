@@ -2,11 +2,12 @@ max_line_size = 64*1024
 
 
 class HTTPError(Exception):
-    def __init__(self, status, reason, body=None):
+    def __init__(self, status, reason, body=None, bg_color=None):
         super()
         self.status = status
         self.reason = reason
         self.body = body
+        self.bg_color = bg_color
 
 
 def validate_status_line(line):
@@ -24,7 +25,9 @@ def get_first_line(file):
         raise HTTPError(414, 'URL Too Long', 'Превышена длинна первой строки запроса')
 
     first_line_list = str(raw, 'iso-8859-1').rstrip('\r\n').split()
-    return first_line_list
+
+    if first_line_list:
+        return first_line_list
 
 
 def parse_headers(file):
@@ -39,16 +42,18 @@ def parse_headers(file):
             break
 
         headers.append(line)
-    print(headers)
+
     dict_headers = {}
+
     for header in headers:
         k, v = header.decode('iso-8859-1').split(':', 1)
         dict_headers[k] = v.strip('\r\n')
+
     return dict_headers
 
 
 def parse_cookie(headers):
-    cookies = headers.get('Cookie')
+    cookies = headers.get('Cookie').strip()
     if cookies:
         cookies = cookies.split(';')
         dict_cookie = {}
@@ -64,32 +69,48 @@ def parse_cookie(headers):
     return None
 
 
+def parse_body(file, headers):
+    size = headers.get('Content-Length')
+    if not size:
+        return None
+    return file.read(size)
+
+
 def process_request(file):
     first_line = get_first_line(file)
-    print(first_line, len(first_line))
     validate_status_line(first_line)
     method, url, _ = first_line
     headers = parse_headers(file)
+    body = parse_body(file, headers)
     cookie = parse_cookie(headers)
     req_data = (method, url, cookie)
-    print(req_data)
-    return req_data
+    return req_data, headers, body
 
 
 def error_resp(data):
     data = (data.status, data.reason, data.body)
-    resp = norm_resp(data)
+    bg_color = data.bg_color
+    resp = norm_resp(data, bg_color=bg_color)
     return resp
 
 
-def norm_resp(data, add_headers=None, cookie=None):
+def norm_resp(data, add_headers=None, bg_color=None):
 
     status, reason, body = data
     content_type = 'text/html; charset=utf-8'
 
     status_line = 'HTTP/1.1 {} {}'.format(status, reason)
+    html_body = ''.encode('utf-8')
+    print(bg_color)
+    if bg_color:
+        bg_color = ' BGCOLOR={}'.format(bg_color)
+
+    if body:
+        html_body = '<html><head></head><body{}><div>'.format(bg_color) + body + '</div></body></html>'
+        html_body = html_body.encode('utf-8')
+
     headers = {'Content-Type': content_type,
-               'Content-Length': len(body)}
+               'Content-Length': len(html_body)}
 
     if add_headers:
         headers.update(add_headers)
@@ -97,30 +118,22 @@ def norm_resp(data, add_headers=None, cookie=None):
     headers_line = ''
 
     for key, value in headers.items():
-        headers_line += '{}: {}'.format(key, value)
+        headers_line += '{}: {}\r\n'.format(key, value)
 
-    if cookie and cookie.get('bg_color') == 'green':
-        bg_color = ' BGCOLOR="#12e079"'
-    else:
-        bg_color = ' BGCOLOR="#fcfcfc"'
-
-    html_body = '<html><head></head><body{}><div>'.format(bg_color) + body + '</div></body></html>'
-    print(status_line, headers_line, html_body)
     resp = status_line.encode('iso-8859-1') + b'\r\n'\
            + headers_line.encode('iso-8859-1') + b'\r\n'\
-           + html_body.encode('utf-8') + b'\r\n' + b'\r\n'
-    print(resp)
+           + html_body + b'\r\n' + b'\r\n'
     return resp
 
 
-def process_response(data, cookie=None):
+def process_response(data, bg_color=None):
 
     if isinstance(data, Exception):  #TODO не забыть о show_error
         resp = error_resp(data)
     elif len(data) == 3:
-        resp = norm_resp(data)
+        resp = norm_resp(data, bg_color=bg_color)
     elif len(data) == 4:
-        resp = norm_resp(data[:4], data[4], cookie=cookie)
-    print(resp)
+        print(data)
+        resp = norm_resp(data[:3], add_headers=data[3], bg_color=bg_color)
 
     return resp
