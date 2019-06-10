@@ -12,7 +12,6 @@ def logging_err_init():
     logger.setLevel(logging.ERROR)
     file_handler = logging.FileHandler('error_log.log')
     log_format = logging.Formatter('\n[{asctime}][{name}] {message}', style='{')
-    log_format.converter = time.gmtime()
     file_handler.setFormatter(log_format)
     logger.addHandler(file_handler)
     return logger
@@ -24,7 +23,6 @@ def logging_req(func):
         logger.setLevel(logging.INFO)
         file_handler = logging.FileHandler('access_log.log')
         log_format = logging.Formatter('[{asctime}]{message}', style='{')
-        log_format.converter = time.gmtime()
         file_handler.setFormatter(log_format)
         logger.addHandler(file_handler)
         result = func(*args, **kwargs)
