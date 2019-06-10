@@ -2,12 +2,11 @@ max_line_size = 64*1024
 
 
 class HTTPError(Exception):
-    def __init__(self, status, reason, body=None, bg_color=None):
+    def __init__(self, status, reason, body=None):
         super()
         self.status = status
         self.reason = reason
         self.body = body
-        self.bg_color = bg_color
 
 
 def validate_status_line(line):
@@ -57,14 +56,15 @@ def parse_cookie(headers):
     if cookies:
         cookies = cookies.split(';')
         dict_cookie = {}
-        for cookie in cookies:
 
+        for cookie in cookies:
             try:
                 k, v = cookie.split('=')
             except ValueError:
                 raise HTTPError(500, 'Bad request.', 'Неправильные печеньки')
 
             dict_cookie[k] = v
+
         return dict_cookie
     return None
 
@@ -73,7 +73,7 @@ def parse_body(file, headers):
     size = headers.get('Content-Length')
     if not size:
         return None
-    return file.read(size)
+    return file.read(int(size))
 
 
 def process_request(file):
@@ -89,27 +89,27 @@ def process_request(file):
 
 def error_resp(data):
     data = (data.status, data.reason, data.body)
-    bg_color = data.bg_color
-    resp = norm_resp(data, bg_color=bg_color)
+    resp = norm_resp(data)
     return resp
 
 
-def norm_resp(data, add_headers=None, bg_color=None):
+def norm_resp(data, add_headers=None, bg_color='', head='<head></head>'):
 
     status, reason, body = data
     content_type = 'text/html; charset=utf-8'
 
     status_line = 'HTTP/1.1 {} {}'.format(status, reason)
     html_body = ''.encode('utf-8')
-    print(bg_color)
+
     if bg_color:
         bg_color = ' BGCOLOR={}'.format(bg_color)
 
     if body:
-        html_body = '<html><head></head><body{}><div>'.format(bg_color) + body + '</div></body></html>'
+        html_body = '<html>{}<body{}><div>'.format(head, bg_color) + body + '</div></body></html>'
         html_body = html_body.encode('utf-8')
 
     headers = {'Content-Type': content_type,
+               'Connection': 'close',
                'Content-Length': len(html_body)}
 
     if add_headers:
@@ -128,12 +128,11 @@ def norm_resp(data, add_headers=None, bg_color=None):
 
 def process_response(data, bg_color=None):
 
-    if isinstance(data, Exception):  #TODO не забыть о show_error
+    if isinstance(data, Exception):
         resp = error_resp(data)
     elif len(data) == 3:
         resp = norm_resp(data, bg_color=bg_color)
     elif len(data) == 4:
-        print(data)
         resp = norm_resp(data[:3], add_headers=data[3], bg_color=bg_color)
 
     return resp

@@ -8,7 +8,7 @@ urls = {
     'short_log',
 }
 show_errors_switch = 0
-short_log_switch = 1
+short_log_switch = 0
 
 
 def get_show_errors_status():
@@ -19,22 +19,24 @@ def get_short_log_status():
     return short_log_switch
 
 
-def handler(method, url, bg_color):
+def handler(method, url):
     url = url.split('/')[1:]
-
     if url[0] in urls:
 
         if url[0] == '' and method == 'GET':
-            start = open('start.html', 'r', encoding='UTF-8')
-            body = '\n'.join(start.readlines())
+            file = open('start.html', 'r', encoding='UTF-8')
+            body = '\n'.join(file.readlines())
+            file.close()
             data = (200, 'OK', body)
             return data
 
         elif url[0] == 'show_errors' and method == 'POST':
-
-            show_errors(url[1])
-            data = (200, 'OK', None)
-            return data
+            if url[1] in {'1', '0'}:
+                show_errors(url[1])
+                data = (200, 'OK', 'OK')
+                return data
+            else:
+                raise HTTPError(404, 'Not found', 'Страница не найдена')
 
         elif url[0] == 'div' and method == 'GET':
 
@@ -52,14 +54,20 @@ def handler(method, url, bg_color):
                 raise HTTPError(404, 'Not found', 'Страница не найдена')
             else:
                 set_cookie['Set-Cookie'] = url[1] + '; path=/'
-                data = (200, 'OK', None, set_cookie)
+                data = (200, 'OK', 'OK', set_cookie)
                 return data
+
         elif url[0] == 'short_log' and method == 'POST':
             global short_log_switch
             if url[1] == '1':
-                short_log_switch = 1
+                 short_log_switch = 1
+                 data = (200, 'OK', 'OK')
+                 return data
             # elif url[1] == '0':
                 # short_log_switch = 0
+            else:
+                raise HTTPError(404, 'Not found', 'Страница не найдена')
+
         else:
             raise HTTPError(405, 'Method Not Allowed', 'Адрес существует, но ожидается другой метод')
 
@@ -67,10 +75,8 @@ def handler(method, url, bg_color):
 
 
 def cookie_handler(cookie):
-    print(cookie)
     if cookie:
         color = cookie.get('bg_color')
-        print(color)
         if color == 'green':
             bg_color = '#12e079'
         else:
@@ -80,7 +86,12 @@ def cookie_handler(cookie):
 
 def run(method, url, cookie=None):
     bg_color = cookie_handler(cookie)
-    data = handler(method, url, bg_color)
+
+    try:
+        data = handler(method, url)
+    except ImportError:
+        raise HTTPError(404, 'Not found', 'Страница не найдена')
+
     return data, bg_color
 
 
@@ -89,7 +100,7 @@ def show_errors(switch):
     if switch in {'1', '0'}:
         show_errors_switch = int(switch)
     else:
-        raise HTTPError()
+        raise HTTPError(404, 'Not found', 'Страница не найдена')
 
 
 def divide(num1, num2):
@@ -108,5 +119,4 @@ def divide(num1, num2):
         reason = 'OK'
     finally:
         data = (status, reason, body)
-        print(status, reason, body)
         return data

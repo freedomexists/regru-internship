@@ -2,8 +2,20 @@ import argparse
 import socket
 import logging
 import time
+import traceback
 from http_processes import process_request, process_response, HTTPError
 from backend import run, get_show_errors_status, get_short_log_status
+
+
+def logging_err_init():
+    logger = logging.getLogger('error_log')
+    logger.setLevel(logging.ERROR)
+    file_handler = logging.FileHandler('error_log.log')
+    log_format = logging.Formatter('\n[{asctime}][{name}] {message}', style='{')
+    log_format.converter = time.gmtime()
+    file_handler.setFormatter(log_format)
+    logger.addHandler(file_handler)
+    return logger
 
 
 def logging_req(func):
@@ -12,14 +24,14 @@ def logging_req(func):
         logger.setLevel(logging.INFO)
         file_handler = logging.FileHandler('access_log.log')
         log_format = logging.Formatter('[{asctime}]{message}', style='{')
-        log_format.converter = time.gmtime
+        log_format.converter = time.gmtime()
         file_handler.setFormatter(log_format)
         logger.addHandler(file_handler)
         result = func(*args, **kwargs)
-        short_log = get_short_log_status()
-        if short_log == 1:
+        short_log_status = get_short_log_status()
+        if short_log_status == 1:
             logger.info('[Method - {} :: URL - {} :: Cookie - {}]'.format(*result))
-        if short_log == 0:
+        if short_log_status == 0:
             logger.info('[Method - {} :: URL - {} :: Cookie - {} :: Headers - {} :: Body - {}]'.format(*result))
         return result
     return wrap_log
@@ -69,9 +81,8 @@ def unpack_req_data(req_file):   #костыль для реализации л�
     return method, url, cookies, headers, body
 
 
-def server(args):
-
-    sock = bind_sock(args.ip, args.port)
+def server(sock):
+    logger = logging_err_init()
 
     while True:
         conn = create_connection(sock)
@@ -80,28 +91,42 @@ def server(args):
         try:
             method, url, cookies, headers, body = unpack_req_data(req_file)
             data, bg_color = run(method, url, cookies)
+
         except HTTPError as e:
-            resp = process_response(e)
-            conn.send(resp)
+            if get_show_errors_status() == 1:
+                e.body += '\n' + traceback.format_exc()
+                resp = process_response(e)
+                conn.send(resp)
+            else:
+                resp = process_response(e)
+                conn.send(resp)
+            logger.exception(e)
             continue
-        except ConnectionResetError:
+
+        except ConnectionResetError as e:
             print('Пришло не HTTP, сворачиваюсь.')
             conn.close()
             sock.close()
+            logger.exception(e)
             break
-        except TypeError:
+
+        except TypeError as e:
+            logger.exception(e)
             continue
+
 
         resp = process_response(data, bg_color=bg_color)
         conn.send(resp)
+
         if conn:
             conn.close()
 
 
 if __name__ == '__main__':
 
-    args = parse_cmd()
-    server(args)
+    cmd_args = parse_cmd()
+    sock = bind_sock(cmd_args.ip, cmd_args.port)
+    server(sock)
 
 
 
