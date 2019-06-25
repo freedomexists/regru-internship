@@ -39,6 +39,12 @@ class Product:
     def __gt__(self, other):
         return self.price > other.price
 
+    def __le__(self, other):
+        return self.price <= other.price
+
+    def __ge__(self, other):
+        return self.price >= other.price
+
     def __eq__(self, other):
         return self.price == other.price
 
@@ -119,6 +125,12 @@ class Order:
     def __gt__(self, other):
         return self.total > other.total
 
+    def __le__(self, other):
+        return self.total <= other.total
+
+    def __ge__(self, other):
+        return self.total >= other.total
+
     def __eq__(self, other):
         return self.total == other.total
 
@@ -137,6 +149,12 @@ class BaseDiscount:
 
     def __gt__(self, other):
         return self.size > other.size
+
+    def __le__(self, other):
+        return self.size <= other.size
+
+    def __ge__(self, other):
+        return self.size >= other.size
 
     def __eq__(self, other):
         return self.size == other.size
