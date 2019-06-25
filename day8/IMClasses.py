@@ -41,7 +41,7 @@ class Order:
         self.uuid = uuid4()
         self.discount = None
         self._discounted_products = {}
-        self.total = 0
+        self.total = self._calculate_total_price()
 
     def _calculate_total_price(self):
         total = 0
