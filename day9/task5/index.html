@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" content="text/html; charset=utf-8">
+    <title>Title</title>
+    <script ENGINE="text/javascript" src="https://code.jquery.com/jquery-1.11.2.js "></script>
+</head>
+<body>
+
+
+<form id="form1" method="post" action="/create/" accept-charset="utf-8">
+
+    <div>
+        <label>servtype <input name="servtype" value="srv_google_apps" type="text"/></label>
+    </div>
+    <div>
+        <label>subtype <input name="subtype" value="start" type="text"/></label>
+    </div>
+    <div>
+        <label>user_id <input name="user_id" value="208949" type="text"/></label>
+    </div>
+    <div>
+        <label>referrer_user_id <input name="referrer_user_id" value="26532" type="text"/></label>
+    </div>
+    <div>
+        <label>state <input name="state" value="A" type="text"/></label>
+    </div>
+    <div>
+        <label>creation_date <input name="creation_date" value="2018-01-11" type="date"/></label>
+    </div>
+    <div>
+        <label>creation_time <input name="creation_time" value="21:51:38" type="time"/></label>
+    </div>
+    <div>
+        <label>creation_request_sent_date <input name="creation_request_sent_date" value="2015-10-09 21:44:27" type="datetime-locale"/></label>
+    </div>
+    <div>
+        <label>notified_about_expiration <input name="notified_about_expiration" value="66" type="text"/></label>
+    </div>
+    <div>
+        <input type="submit" value="insert"/>
+    </div>
+
+</form>
+<form id="form2" method="post" action="/opencsv/" enctype="multipart/form-data">
+    <div>
+        <input type="file" name="file"/>
+        <input type="submit" value="Отправить">
+    </div>
+    </form>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.editbtn').click(function() {
+      var $this = $(this);
+      var tds = $this.closest('tr').find('td').filter(function() {
+        return $(this).find('.editbtn').length === 0;
+      });
+      if ($this.html() === 'Edit') {
+        $this.html('Save');
+        tds.prop('contenteditable', true);
+      } else {
+        $this.html('Edit');
+        tds.prop('contenteditable', false);
+      }
+    });
+  });
+
+</script>
+<table id="tableone" border="1">
+    <thead>
+        <tr><th class="col1">service_id</th><th class="col2">Header 2</th><th class="col3">Header 3</th><th class="col3">Header 4</th><th class="col2">Header 2</th><th class="col2">Header 2</th></tr>
+    </thead>
+    <tr class="del">
+        <td contenteditable="false">Row 0 Column 0</td>
+        <td><button class="editbtn">Edit</button></td>
+        <td contenteditable="false">Row 0 Column 1</td>
+        <td contenteditable="false">Row 0 Column 2</td>
+    </tr>
+    <tr class="del">
+        <td contenteditable="false">Row 1 Column 0</td>
+        <td contenteditable="false">Row 1 Column 1</td>
+        <td contenteditable="false">Row 1 Column 2</td>
+        <td><button class="editbtn">Edit</button></td>
+        <td><form action='/delete/' method='post'><input type='submit' value='X'></form></td>
+    </tr>
+</table>
+</body>
+</html>
