@@ -1,7 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 import mysql.connector
 from jinja2 import Template
-import csv
+
 
 
 def parse_content(content):
@@ -41,11 +41,25 @@ def clear_table():
     connect_db.commit()
     cursor.close()
 
+
+def get_data():
+    cursor = connect_db.cursor()
+    query = ("SELECT * FROM table_task1;")
+    cursor.execute(query)
+    print(cursor)
+    data = cursor.fetchall()
+    cursor.close()
+    return data
+
 class MyRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         self.send_response(200)
         self.end_headers()
-        self.wfile.write(open('index.html', 'rb').read())
+        html = open('index.html').read()
+        template = Template(html)
+        table = get_data()
+        # self.wfile.write(open('index.html', 'rb').read())
+        self.wfile.write(template.render(table=table).encode())
 
     def do_POST(self):
 

@@ -70,19 +70,15 @@
     <thead>
         <tr><th class="col1">service_id</th><th class="col2">Header 2</th><th class="col3">Header 3</th><th class="col3">Header 4</th><th class="col2">Header 2</th><th class="col2">Header 2</th></tr>
     </thead>
+    {% for row in table%}
     <tr class="del">
-        <td contenteditable="false">Row 0 Column 0</td>
+        {% for item in row%}
+        <td id="{{row[0]}}">{{item}}</td>
+        {%endfor%}
         <td><button class="editbtn">Edit</button></td>
-        <td contenteditable="false">Row 0 Column 1</td>
-        <td contenteditable="false">Row 0 Column 2</td>
+        <td><form action='/delete/' method='post'><input type="" name="id" value='X'></form></td>
     </tr>
-    <tr class="del">
-        <td contenteditable="false">Row 1 Column 0</td>
-        <td contenteditable="false">Row 1 Column 1</td>
-        <td contenteditable="false">Row 1 Column 2</td>
-        <td><button class="editbtn">Edit</button></td>
-        <td><form action='/delete/' method='post'><input type='submit' value='X'></form></td>
-    </tr>
+    {%endfor%}
 </table>
 </body>
 </html>
