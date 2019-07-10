@@ -3,7 +3,6 @@ import mysql.connector
 from jinja2 import Template
 
 
-
 def parse_content(content):
     content = content.decode('utf-8').replace('%3A', ':').replace('T', ' ')
     parsed_content_list = []
@@ -42,27 +41,33 @@ def clear_table():
     cursor.close()
 
 
+def del_row(id):
+    cursor = connect_db.cursor()
+    delete = ("DELETE FROM table_task1 WHERE service_id = {};".format(id))
+    cursor.execute(delete)
+    connect_db.commit()
+    cursor.close()
+
+
 def get_data():
     cursor = connect_db.cursor()
     query = ("SELECT * FROM table_task1;")
     cursor.execute(query)
-    print(cursor)
     data = cursor.fetchall()
     cursor.close()
     return data
 
+
 class MyRequestHandler(BaseHTTPRequestHandler):
+
     def do_GET(self):
-        self.send_response(200)
-        self.end_headers()
-        html = open('index.html').read()
-        template = Template(html)
-        table = get_data()
-        # self.wfile.write(open('index.html', 'rb').read())
-        self.wfile.write(template.render(table=table).encode())
+        pth = self.path.split('/')
+        if pth[1] == 'delete':
+            del_row(pth[2])
+        self.gen_page()
+
 
     def do_POST(self):
-
         content_length = int(self.headers['Content-Length'])
         body = self.rfile.read(content_length)
 
@@ -80,15 +85,18 @@ class MyRequestHandler(BaseHTTPRequestHandler):
                         if row[i] == 'NULL':
                             row[i] = None
                     row = tuple(row)
-                    print(row)
                     insert_data(row)
-                    print(row)
 
+        self.gen_page()
+
+
+    def gen_page(self):
         self.send_response(200)
         self.end_headers()
-
-        # self.wfile.write(open('index.html', 'rb').read())
-
+        html = open('index.html').read()
+        template = Template(html)
+        table = get_data()
+        self.wfile.write(template.render(table=table).encode())
 
 connect_db = mysql.connector.connect(user='blase', password='123',
                               host='127.0.0.1',

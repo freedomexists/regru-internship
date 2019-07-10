@@ -76,7 +76,7 @@
         <td id="{{row[0]}}">{{item}}</td>
         {%endfor%}
         <td><button class="editbtn">Edit</button></td>
-        <td><form action='/delete/' method='post'><input type="" name="id" value='X'></form></td>
+        <td><form action='/delete/{{row[0]}}/' method='get'><input type="submit" value='X'></form></td>
     </tr>
     {%endfor%}
 </table>
