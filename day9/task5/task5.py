@@ -91,11 +91,11 @@ def update_row_in_table(body):
 
 
 @handler.router.register('(/delete/)(\d+)')
-def delete_row_in_table(*kwargs):
-    del_row(kwargs[2])
+def delete_row_in_table(*args):
+    del_row(args[2])
 
 
-@handler.router.register('/')
+@handler.router.register('/$')
 def send_index(body):
     pass
 
