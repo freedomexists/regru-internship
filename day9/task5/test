@@ -1,0 +1,5 @@
+#!/bin/bash
+while ! mysqladmin ping -h localhost;
+do
+    sleep 1
+done
