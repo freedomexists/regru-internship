@@ -55,7 +55,7 @@ class MyRequestHandler(BaseHTTPRequestHandler):
 
 
 connect = mysql.connector.connect(user='blase', password='123',
-                              host='127.0.0.1',
+                              host='172.25.0.2',
                               database='day9')
 handler = MyRequestHandler
 
@@ -173,5 +173,6 @@ def get_data(connect_db):
 
 
 if __name__ == '__main__':
-    httpd = HTTPServer(('10.0.2.15', 8000), MyRequestHandler)
+    print('i\'m up')
+    httpd = HTTPServer(('10.0.2.15', 5000), MyRequestHandler)
     httpd.serve_forever()

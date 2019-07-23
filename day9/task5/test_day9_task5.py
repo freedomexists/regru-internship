@@ -19,7 +19,7 @@ select_all = [(22624301, 'srv_hosting_ispmgr', 'Host-Lite-0910', 46544, 26532, '
 
 
 connect = mysql.connector.connect(user='blase', password='123',
-                              host='127.0.0.1',
+                              host='test_db',
                               database='test_db')
 
 sample_list = ['35109399;srv_license_isp;lite5;664082;664082;S;2018-02-12;08:29:22;2012-07-12 12:40:15;55',

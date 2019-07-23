@@ -1,5 +1,3 @@
 #!/bin/bash
-while ! mysqladmin ping -h localhost;
-do
-    sleep 1
-done
+sleep 10
+python3 task5.py

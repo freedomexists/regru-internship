@@ -3,14 +3,23 @@ version: '3'
 services:
   api:
     build: .
+    command: /bin/bash  ./test
     volumes:
       - ./:/task5
-    ports:
-      - "8000:8000"
+    expose:
+      - 5000
     depends_on:
-      - mysql
-  mysql:
-    container_name: mysql
+      - mysql-main
+  nginx:
+    image: nginx:1.16
+    ports:
+      - "8000:5000"
+    volumes:
+      - ./nginx.conf:/etc/conf.d/main.conf
+    depends_on:
+      - api
+  mysql-main:
+    container_name: mysql-main
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     ports:
@@ -18,5 +27,16 @@ services:
     environment:
       - MYSQL_ROOT_PASSWORD=password
       - MYSQL_DATABASE=day9
+      - MYSQL_USER=blase
+      - MYSQL_PASSWORD=123
+  test-db:
+    container_name: test-db
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3308:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=test_db
       - MYSQL_USER=blase
       - MYSQL_PASSWORD=123
