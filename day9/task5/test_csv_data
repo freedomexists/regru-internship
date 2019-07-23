@@ -1,0 +1,17 @@
+------WebKitFormBoundary4BNUeHsD83qXcjDa
+Content-Disposition: form-data; name="file"; filename="table_task1.csv"
+Content-Type: application/vnd.ms-excel
+
+service_id;servtype;subtype;user_id;referrer_user_id;state;creation_date;creation_time;creation_request_sent_date;notified_about_expiration
+35109399;srv_license_isp;lite5;664082;664082;S;2018-02-12;08:29:22;2012-07-12 12:40:15;55
+35109397;srv_vps;SSD-VPS-2-0317;664082;664082;D;2018-02-12;08:31:24;NULL;-3
+34490653;srv_websitebuilder;start;208949;26532;A;2018-01-11;21:51:38;2010-03-12 11:25:45;0
+32866369;srv_google_apps;trial;382636;393221;D;2017-11-03;09:02:42;NULL;1
+30951405;srv_license_isp;lite5;45532;26532;O;2017-08-18;16:04:41;NULL;0
+29414795;srv_vps;XEN-2-1216;26112;26532;D;2017-06-06;11:20:34;2010-03-02 16:59:55;3
+27088203;srv_vps;SSD-VPS-1-0317;26532;26532;S;2017-03-06;13:06:35;NULL;3
+23200637;srv_parallels_wpb;WPB-Standart;664082;26532;A;2016-10-26;11:03:20;NULL;127
+22712397;srv_vps;WIN-3;345532;26532;A;2016-09-29;09:53:40;NULL;0
+22624301;srv_hosting_ispmgr;Host-Lite-0910;46544;26532;D;2016-09-23;22:50:50;2010-02-27 16:52:58;5
+
+------WebKitFormBoundary4BNUeHsD83qXcjDa--
