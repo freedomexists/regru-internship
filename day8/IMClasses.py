@@ -27,12 +27,26 @@ class Product:
         self.name = name
         self.price = price
 
-
     def __str__(self):
         return '{0} (price={1}, category={2} (label={3}))'.format(self.name,
                                                                   self.price,
                                                                   self.category.label,
                                                                   self.category.name)
+
+    def __lt__(self, other):
+        return self.price < other.price
+
+    def __gt__(self, other):
+        return self.price > other.price
+
+    def __le__(self, other):
+        return self.price <= other.price
+
+    def __ge__(self, other):
+        return self.price >= other.price
+
+    def __eq__(self, other):
+        return self.price == other.price
 
 
 class Order:
@@ -105,6 +119,21 @@ class Order:
         return 'Заказ №{0} на сумму {1}'.format(self.uuid,
                                                 self.total)
 
+    def __lt__(self, other):
+        return self.total < other.total
+
+    def __gt__(self, other):
+        return self.total > other.total
+
+    def __le__(self, other):
+        return self.total <= other.total
+
+    def __ge__(self, other):
+        return self.total >= other.total
+
+    def __eq__(self, other):
+        return self.total == other.total
+
 
 class BaseDiscount:
     def __init__(self, size=10):
@@ -114,6 +143,21 @@ class BaseDiscount:
 
     def __str__(self):
         return 'Базовая Скидка - 10%'
+
+    def __lt__(self, other):
+        return self.size < other.size
+
+    def __gt__(self, other):
+        return self.size > other.size
+
+    def __le__(self, other):
+        return self.size <= other.size
+
+    def __ge__(self, other):
+        return self.size >= other.size
+
+    def __eq__(self, other):
+        return self.size == other.size
 
 
 class SaleDiscount(BaseDiscount):
