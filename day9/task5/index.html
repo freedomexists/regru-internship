@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" content="text/html; charset=utf-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+<form id="form1" method="post" action="/create/" accept-charset="utf-8">
+
+    <!--<div>-->
+        <!--<label>service_id <input name="service_id" value="35109397" type="text"/></label>-->
+    <!--</div>-->
+    <div>
+        <label>servtype <input name="servtype" value="srv_google_apps" type="text"/></label>
+    </div>
+    <div>
+        <label>subtype <input name="subtype" value="start" type="text"/></label>
+    </div>
+    <div>
+        <label>user_id <input name="user_id" value="208949" type="text"/></label>
+    </div>
+    <div>
+        <label>referrer_user_id <input name="referrer_user_id" value="26532" type="text"/></label>
+    </div>
+    <div>
+        <label>state <input name="state" value="A" type="text"/></label>
+    </div>
+    <div>
+        <label>creation_date <input name="creation_date" value="2018-01-11" type="date"/></label>
+    </div>
+    <div>
+        <label>creation_time <input name="creation_time" value="21:51:38" type="time"/></label>
+    </div>
+    <div>
+        <label>creation_request_sent_date <input name="creation_request_sent_date" value="2015-10-09 21:44:27" type="datetime-local"/></label>
+    </div>
+    <div>
+        <label>notified_about_expiration <input name="notified_about_expiration" value="66" type="text"/></label>
+    </div>
+    <div>
+        <input type="submit" value="insert"/>
+    </div>
+
+</form>
+
+<form id="form2" method="post" action="/opencsv/" enctype="multipart/form-data">
+    <div>
+        <input type="file" name="file"/>
+        <input type="submit" value="Отправить">
+    </div>
+</form>
+<table id="tableone" border="1">
+    <thead>
+        <tr><th>service_id</th><th>servtype</th><th>subtype</th><th>user_id</th><th>referrer_user_id</th><th>state</th><th>creation_date</th><th>creation_time</th><th>creation_request_sent_date</th><th>notified_about_expiration</th></tr>
+    </thead>
+    {% for row in table%}
+
+    <tr class="del">
+    <form action='/update/' method='post'>
+        {% for item in row%}
+        <td contenteditable="true" id="{{item}}"><input name="{{item}}" value="{{item}}"/></td>
+        {%endfor%}
+        <td><input type="submit" value='Edit'></td>
+    </form>
+        <td><form action='/delete/{{row[0]}}/' method='get'><input type="submit" value='X'></form></td>
+
+    </tr>
+    {%endfor%}
+</table>
+</body>
+</html>
