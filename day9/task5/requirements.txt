@@ -1,4 +1,4 @@
-Jinja2==2.10.1
+Jinja2==2.11.3
 mysql-connector-python
 mysqlclient==1.4.2.post1
 bash
